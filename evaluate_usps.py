@@ -34,11 +34,7 @@ def preprocess_digit_image(pil_img: Image.Image) -> np.ndarray:
     """Chuẩn hóa ảnh chữ số về vector (784,) [0.0, 1.0], nền đen chữ sáng, căn trọng tâm."""
     gray = pil_img.convert("L")
     arr = np.asarray(gray, dtype=np.float32) / 255.0
-
-    # Tự nhận diện nếu nền sáng hơn chữ (viền sáng hơn) thì đảo màu về nền đen chữ sáng
-    border = np.concatenate([arr[0, :], arr[-1, :], arr[:, 0], arr[:, -1]])
-    if float(np.mean(border)) > 0.5:
-        arr = 1.0 - arr
+    arr = 1.0 - arr
 
     arr_u8 = np.clip(arr * 255.0, 0, 255).astype(np.uint8)
     coords = np.argwhere(arr_u8 > 25)
